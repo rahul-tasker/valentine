@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Question</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        h1 {
+            color: #e75480;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .plea-message {
+            color: #e75480;
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            height: 1.5em;
+            position: relative;
+        }
+
+        .plea-message .plea-text {
+            position: absolute;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            white-space: nowrap;
+            animation: pleaIn 0.5s ease forwards;
+        }
+
+        .plea-message .plea-text.fade-out {
+            animation: pleaOut 0.5s ease forwards;
+        }
+
+        @keyframes pleaIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes pleaOut {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        .heart-gif {
+            width: 338px;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .yes-btn {
+            background: #e75480;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            box-shadow: 0 5px 20px rgba(231, 84, 128, 0.4);
+        }
+
+        .no-btn {
+            background: #888;
+            color: white;
+            position: relative;
+            transition: transform 0.5s ease-out;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: white;
+            font-size: 1.2rem;
+            font-style: italic;
+            min-height: 1.5em;
+            text-align: center;
+            z-index: 10;
+            text-shadow:
+                -1px -1px 0 #e75480,
+                1px -1px 0 #e75480,
+                -1px 1px 0 #e75480,
+                1px 1px 0 #e75480;
+        }
+
+        /* Floating Hearts Background */
+        .floating-heart {
+            position: fixed;
+            top: 0;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            animation-name: floatHeart;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-fill-mode: backwards;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+            }
+        }
+
+        /* Yay Screen */
+        .yay-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8a80 100%);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .yay-screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .corner-bouquet {
+            position: fixed;
+            width: 800px;
+            z-index: 5;
+        }
+
+        .corner-bouquet.top-left {
+            top: 0;
+            left: 0;
+            transform: translate(-100%, -100%) rotate(135deg);
+            animation: slideInTopLeft 1s ease-out forwards;
+        }
+
+        .corner-bouquet.top-right {
+            top: 0;
+            right: 0;
+            transform: translate(100%, -100%) rotate(-135deg);
+            animation: slideInTopRight 1s ease-out forwards;
+        }
+
+        .corner-bouquet.bottom-left {
+            bottom: 0;
+            left: 0;
+            transform: translate(-100%, 100%) rotate(45deg);
+            animation: slideInBottomLeft 1s ease-out forwards;
+        }
+
+        .corner-bouquet.bottom-right {
+            bottom: 0;
+            right: 0;
+            transform: translate(100%, 100%) rotate(-45deg);
+            animation: slideInBottomRight 1s ease-out forwards;
+        }
+
+        @keyframes slideInTopLeft {
+            to { transform: translate(-50%, -50%) rotate(135deg); }
+        }
+
+        @keyframes slideInTopRight {
+            to { transform: translate(50%, -50%) rotate(-135deg); }
+        }
+
+        @keyframes slideInBottomLeft {
+            to { transform: translate(-50%, 50%) rotate(45deg); }
+        }
+
+        @keyframes slideInBottomRight {
+            to { transform: translate(50%, 50%) rotate(-45deg); }
+        }
+
+        .yay-bouquet {
+            animation: none;
+        }
+
+        .yay-screen.active .yay-bouquet.top-left {
+            animation: slideInTopLeft 1s ease-out forwards;
+        }
+
+        .yay-screen.active .yay-bouquet.top-right {
+            animation: slideInTopRight 1s ease-out forwards;
+        }
+
+        .yay-screen.active .yay-bouquet.bottom-left {
+            animation: slideInBottomLeft 1s ease-out forwards;
+        }
+
+        .yay-screen.active .yay-bouquet.bottom-right {
+            animation: slideInBottomRight 1s ease-out forwards;
+        }
+
+        .yay-text {
+            font-size: 8rem;
+            color: white;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+
+        .custom-message {
+            font-size: 2rem;
+            color: white;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            height: 2.5rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .message-text {
+            position: absolute;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            white-space: nowrap;
+            animation: messageIn 0.5s ease forwards;
+        }
+
+        .message-text.fade-out {
+            animation: messageOut 0.5s ease forwards;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes messageOut {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .yay-gifs {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .yay-gif {
+            width: 150px;
+            border-radius: 10px;
+        }
+
+        /* Sad Screen */
+        .sad-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4a6fa5 0%, #6b8cae 100%);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .sad-screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sad-text {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .sad-emoji {
+            font-size: 6rem;
+            margin-bottom: 20px;
+        }
+
+        /* Tears */
+        .tear {
+            position: fixed;
+            font-size: 1.5rem;
+            top: -30px;
+            z-index: 101;
+            animation: tearFall linear forwards;
+        }
+
+        @keyframes tearFall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #e75480;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 102;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .sad-screen .back-btn {
+            color: #4a6fa5;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 101;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Flowers */
+        .flower {
+            position: fixed;
+            bottom: -50px;
+            font-size: 2.5rem;
+            z-index: 101;
+            animation-fill-mode: forwards;
+        }
+
+        .flower.throw-left {
+            animation: throwLeftX 2.5s linear forwards, throwY 2.5s ease-in-out forwards, flowerRotate 2.5s linear forwards, flowerFade 2.5s ease-in forwards;
+        }
+
+        .flower.throw-right {
+            animation: throwRightX 2.5s linear forwards, throwY 2.5s ease-in-out forwards, flowerRotateReverse 2.5s linear forwards, flowerFade 2.5s ease-in forwards;
+        }
+
+        @keyframes throwLeftX {
+            0% { margin-left: 0; }
+            100% { margin-left: -25vw; }
+        }
+
+        @keyframes throwRightX {
+            0% { margin-left: 0; }
+            100% { margin-left: 25vw; }
+        }
+
+        @keyframes throwY {
+            0% { margin-bottom: 0; }
+            50% { margin-bottom: 70vh; }
+            100% { margin-bottom: -20vh; }
+        }
+
+        @keyframes flowerRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flowerRotateReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes flowerFade {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+                max-width: 90vw;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .heart-gif {
+                width: 200px;
+            }
+
+            .plea-message {
+                font-size: 0.95rem;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .corner-bouquet {
+                width: 400px;
+            }
+
+            .yay-text {
+                font-size: 5rem;
+            }
+
+            .custom-message {
+                font-size: 1.4rem;
+            }
+
+            .yay-gifs {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .yay-gif {
+                width: 100px;
+            }
+
+            .message {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .heart-gif {
+                width: 150px;
+            }
+
+            .plea-message {
+                font-size: 0.85rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 25px;
+                font-size: 0.95rem;
+            }
+
+            .corner-bouquet {
+                width: 200px;
+            }
+
+            .yay-screen {
+                padding: 10px;
+                overflow: hidden;
+            }
+
+            .yay-bouquet {
+                width: 150px;
+            }
+
+            .yay-text {
+                font-size: 2.5rem;
+                margin-bottom: 0;
+            }
+
+            .custom-message {
+                font-size: 1rem;
+                padding: 0 10px;
+                white-space: normal;
+                margin-top: 10px;
+                height: auto;
+                min-height: 2.5em;
+            }
+
+            .custom-message .message-text {
+                white-space: normal;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                text-align: center;
+                opacity: 0;
+                animation: messageMobileIn 0.5s ease forwards;
+            }
+
+            .custom-message .message-text.fade-out {
+                animation: messageMobileOut 0.5s ease forwards;
+            }
+
+            @keyframes messageMobileIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+
+            @keyframes messageMobileOut {
+                from {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-10px);
+                }
+            }
+
+            .yay-gifs {
+                gap: 8px;
+                margin-top: 15px;
+            }
+
+            .yay-gif {
+                width: 70px;
+            }
+
+            .back-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="assets/bouquet.png" class="corner-bouquet top-left" alt="">
+    <img src="assets/bouquet.png" class="corner-bouquet top-right" alt="">
+    <img src="assets/bouquet.png" class="corner-bouquet bottom-left" alt="">
+    <img src="assets/bouquet.png" class="corner-bouquet bottom-right" alt="">
+
+    <div class="container">
+        <h1 id="question">Will you be my Valentine?</h1>
+        <p class="plea-message" id="pleaMessage"></p>
+        <img src="assets/gif.gif" alt="Heart" class="heart-gif">
+        <div class="buttons">
+            <button class="yes-btn" id="yesBtn" onclick="sayYes()">Yes</button>
+            <button class="no-btn" id="noBtn" onclick="sayNo()">No</button>
+        </div>
+    </div>
+    <p class="message" id="message"></p>
+
+    <div class="yay-screen" id="yayScreen">
+        <img src="assets/bouquet.png" class="corner-bouquet yay-bouquet top-left" alt="">
+        <img src="assets/bouquet.png" class="corner-bouquet yay-bouquet top-right" alt="">
+        <img src="assets/bouquet.png" class="corner-bouquet yay-bouquet bottom-left" alt="">
+        <img src="assets/bouquet.png" class="corner-bouquet yay-bouquet bottom-right" alt="">
+        <h1 class="yay-text">YAY!</h1>
+        <p class="custom-message" id="customMessage"></p>
+        <div class="yay-gifs">
+            <img src="assets/yay-gifs/frog.gif" alt="Frog" class="yay-gif">
+            <img src="assets/yay-gifs/penguin.gif" alt="Penguin" class="yay-gif">
+            <img src="assets/yay-gifs/bear.gif" alt="Bear" class="yay-gif">
+        </div>
+        <button class="back-btn" onclick="goBack()">&#8592;</button>
+    </div>
+
+    <div class="sad-screen" id="sadScreen">
+        <div class="sad-emoji">💔</div>
+        <h1 class="sad-text">You broke my heart...</h1>
+        <button class="back-btn" onclick="goBack()">&#8592;</button>
+    </div>
+
+    <script>
+        // Parse URL parameters for personalization
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipientName = urlParams.get('name');
+
+        // Apply personalization
+        if (recipientName) {
+            document.getElementById('question').textContent = `Will you be my Valentine, ${recipientName}?`;
+        }
+
+        // Rotating messages for yay screen
+        const yayMessages = [
+            "Phew I thought you were going to say no",
+            "I love you Danny!",
+            "Wow I'm so lucky",
+            "Best decision you've ever made!",
+            "No take-backs allowed!",
+            "You make my heart so happy",
+            "You're my favorite person",
+            "I promise to share my snacks with you"
+        ];
+        let currentMessageIndex = 0;
+        let messageInterval = null;
+
+        function showNextMessage() {
+            const container = document.getElementById('customMessage');
+            const currentSpan = container.querySelector('.message-text:not(.fade-out)');
+
+            if (currentSpan) {
+                currentSpan.classList.add('fade-out');
+                setTimeout(() => currentSpan.remove(), 500);
+            }
+
+            currentMessageIndex = (currentMessageIndex + 1) % yayMessages.length;
+            const newSpan = document.createElement('span');
+            newSpan.className = 'message-text';
+            newSpan.textContent = yayMessages[currentMessageIndex];
+            container.appendChild(newSpan);
+        }
+
+        function startMessageRotation() {
+            const container = document.getElementById('customMessage');
+            container.innerHTML = '';
+            currentMessageIndex = 0;
+
+            const firstSpan = document.createElement('span');
+            firstSpan.className = 'message-text';
+            firstSpan.textContent = yayMessages[0];
+            container.appendChild(firstSpan);
+
+            messageInterval = setInterval(showNextMessage, 3000);
+        }
+
+        function stopMessageRotation() {
+            if (messageInterval) {
+                clearInterval(messageInterval);
+                messageInterval = null;
+            }
+        }
+
+        // Create floating hearts on page load
+        function createFloatingHearts() {
+            const hearts = ['❤️', '💕', '💗', '💖', '💘'];
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+
+                const left = Math.random() * 100;
+                const duration = Math.random() * 10 + 15;
+                const delay = Math.random() * 15;
+                const size = Math.random() * 1 + 1;
+
+                heart.style.left = left + 'vw';
+                heart.style.animationDuration = duration + 's';
+                heart.style.animationDelay = delay + 's';
+                heart.style.fontSize = size + 'rem';
+
+                document.body.appendChild(heart);
+            }
+        }
+        createFloatingHearts();
+
+        // Rotating plea messages on home screen
+        const pleaMessages = [
+            "Please be my valentine",
+            "Please",
+            "PLEASE!",
+            "I really want you to be my valentine",
+            "If you're not my valentine, I'll die",
+            "C'mon do it"
+        ];
+        let currentPleaIndex = 0;
+
+        function showNextPlea() {
+            const container = document.getElementById('pleaMessage');
+            const currentSpan = container.querySelector('.plea-text:not(.fade-out)');
+
+            if (currentSpan) {
+                currentSpan.classList.add('fade-out');
+                setTimeout(() => currentSpan.remove(), 500);
+            }
+
+            currentPleaIndex = (currentPleaIndex + 1) % pleaMessages.length;
+            const newSpan = document.createElement('span');
+            newSpan.className = 'plea-text';
+            newSpan.textContent = pleaMessages[currentPleaIndex];
+            container.appendChild(newSpan);
+        }
+
+        function startPleaRotation() {
+            const container = document.getElementById('pleaMessage');
+            const firstSpan = document.createElement('span');
+            firstSpan.className = 'plea-text';
+            firstSpan.textContent = pleaMessages[0];
+            container.appendChild(firstSpan);
+
+            setInterval(showNextPlea, 2000);
+        }
+
+        startPleaRotation();
+
+        function sayYes() {
+            // Reset button states before showing yay screen
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            noBtn.style.transform = 'scale(1)';
+            yesBtn.style.transform = 'scale(1)';
+            noButtonScale = 1;
+            yesButtonScale = 1;
+            currentX = 0;
+            currentY = 0;
+
+            document.body.style.overflow = 'hidden';
+            window.scrollTo(0, 0);
+            document.getElementById('yayScreen').classList.add('active');
+            createConfetti();
+            createFlowers();
+            startMessageRotation();
+
+            const airhorn1 = new Audio('assets/airhorn.mp3');
+            const airhorn2 = new Audio('assets/airhorn.mp3');
+            const airhorn3 = new Audio('assets/airhorn.mp3');
+
+            airhorn1.play();
+            setTimeout(() => airhorn2.play(), 2000);
+            setTimeout(() => airhorn3.play(), 3000);
+        }
+
+        function showSadScreen() {
+            document.getElementById('sadScreen').classList.add('active');
+            createTears();
+        }
+
+        function goBack() {
+            document.body.style.overflow = '';
+            document.getElementById('yayScreen').classList.remove('active');
+            document.getElementById('sadScreen').classList.remove('active');
+            document.querySelectorAll('.confetti').forEach(c => c.remove());
+            document.querySelectorAll('.flower').forEach(f => f.remove());
+            document.querySelectorAll('.tear').forEach(t => t.remove());
+            stopMessageRotation();
+            stopConfetti();
+
+            // Reset everything
+            noClickCount = 0;
+            noButtonScale = 1;
+            yesButtonScale = 1;
+            currentX = 0;
+            currentY = 0;
+
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const message = document.getElementById('message');
+
+            noBtn.style.transform = 'scale(1)';
+            noBtn.style.visibility = 'visible';
+            yesBtn.style.transform = 'scale(1)';
+            message.textContent = '';
+        }
+
+        const messages = [
+            "Come on, please?",
+            "Noooooo!",
+            "Please try again!",
+            "Are you sure?",
+            "Pretty please?",
+            "I'll be sad...",
+            "Think about it!",
+            "One more chance?",
+            "Don't do this to me!",
+            "I'm begging you!"
+        ];
+        let noClickCount = 0;
+        let noButtonScale = 1;
+        let yesButtonScale = 1;
+        let currentX = 0;
+        let currentY = 0;
+
+        let moveTimeout;
+        function moveNoButton() {
+            const btn = document.getElementById('noBtn');
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+
+            const maxX = containerRect.width - btn.offsetWidth - 40;
+            const maxY = containerRect.height - btn.offsetHeight - 40;
+
+            currentX = Math.random() * maxX - maxX / 2;
+            currentY = Math.random() * maxY - maxY / 2;
+
+            btn.style.transform = `translate(${currentX}px, ${currentY}px) scale(${noButtonScale})`;
+        }
+
+        document.getElementById('noBtn').addEventListener('mouseover', function() {
+            moveTimeout = setTimeout(moveNoButton, 400);
+        });
+
+        document.getElementById('noBtn').addEventListener('mouseout', function() {
+            clearTimeout(moveTimeout);
+        });
+
+        // Mobile touch support - button jumps and shrinks on touch
+        document.getElementById('noBtn').addEventListener('touchstart', function(e) {
+            e.preventDefault();
+
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const message = document.getElementById('message');
+
+            noButtonScale *= 0.8;
+            yesButtonScale *= 1.2;
+            yesBtn.style.transform = `scale(${yesButtonScale})`;
+
+            message.textContent = messages[noClickCount % messages.length];
+            noClickCount++;
+
+            if (noButtonScale < 0.2) {
+                noBtn.style.visibility = 'hidden';
+                message.textContent = "";
+                showSadScreen();
+            } else {
+                moveNoButton();
+            }
+        }, { passive: false });
+
+        function sayNo() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const message = document.getElementById('message');
+
+            noButtonScale *= 0.8;
+            yesButtonScale *= 1.2;
+            noBtn.style.transform = `translate(${currentX}px, ${currentY}px) scale(${noButtonScale})`;
+            yesBtn.style.transform = `scale(${yesButtonScale})`;
+
+            message.textContent = messages[noClickCount % messages.length];
+            noClickCount++;
+
+            if (noButtonScale < 0.2) {
+                noBtn.style.visibility = 'hidden';
+                message.textContent = "";
+                showSadScreen();
+            }
+        }
+
+        let confettiInterval = null;
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6bd6', '#fff'];
+            const shapes = ['square', 'circle'];
+
+            function spawnConfetti() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const left = Math.random() * 100;
+                const size = Math.random() * 10 + 5;
+                const duration = Math.random() * 3 + 2;
+
+                confetti.style.left = left + 'vw';
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                confetti.style.background = color;
+                confetti.style.borderRadius = shape === 'circle' ? '50%' : '0';
+                confetti.style.animationDuration = duration + 's';
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), duration * 1000);
+            }
+
+            // Initial burst
+            for (let i = 0; i < 50; i++) {
+                setTimeout(spawnConfetti, i * 30);
+            }
+
+            // Continuous confetti
+            confettiInterval = setInterval(spawnConfetti, 100);
+        }
+
+        function stopConfetti() {
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+        }
+
+        function createFlowers() {
+            const flowers = ['🌸', '🌷', '🌹', '🌺', '🌻', '💐', '🌼'];
+
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const flower = document.createElement('div');
+                    const direction = Math.random() > 0.5 ? 'throw-left' : 'throw-right';
+                    flower.className = `flower ${direction}`;
+
+                    const flowerEmoji = flowers[Math.floor(Math.random() * flowers.length)];
+                    const left = 35 + Math.random() * 30;
+                    const size = Math.random() * 1 + 2;
+
+                    flower.textContent = flowerEmoji;
+                    flower.style.left = left + 'vw';
+                    flower.style.fontSize = size + 'rem';
+
+                    document.body.appendChild(flower);
+
+                    setTimeout(() => flower.remove(), 2500);
+                }, i * 200);
+            }
+        }
+
+        function createTears() {
+            const tears = ['💧', '😢', '💦'];
+
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const tear = document.createElement('div');
+                    tear.className = 'tear';
+
+                    const tearEmoji = tears[Math.floor(Math.random() * tears.length)];
+                    const left = Math.random() * 100;
+                    const duration = Math.random() * 2 + 2;
+                    const size = Math.random() * 1 + 1;
+
+                    tear.textContent = tearEmoji;
+                    tear.style.left = left + 'vw';
+                    tear.style.fontSize = size + 'rem';
+                    tear.style.animationDuration = duration + 's';
+
+                    document.body.appendChild(tear);
+
+                    setTimeout(() => tear.remove(), duration * 1000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
